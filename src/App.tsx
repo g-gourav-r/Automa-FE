@@ -1,20 +1,21 @@
-import { Routes, Route } from 'react-router-dom'
-import InvoiceParser from './pages/InvoiceParser' 
-import FileUpload from './pages/FileUpload'  
+import AppRoutes from "@/Routes/Routes";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { login } from "@/redux/authSlice";
+
 
 function App() {
-  return (
-    <div>
-      <Routes>
+  const dispatch = useDispatch();
 
-        {/* Route for review page */}
-        <Route path="/" element={<FileUpload />} />
-        
-        {/* Route for home page */}
-        <Route path="/review" element={<InvoiceParser />} />
-      </Routes>
-    </div>
-  )
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    const userJson = localStorage.getItem("user");
+    if (token && userJson) {
+      dispatch(login({ token }));
+    }
+  }, [dispatch]);
+
+  return <AppRoutes />;
 }
 
 export default App
