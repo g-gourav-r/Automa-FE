@@ -4,15 +4,9 @@ import {
   GalleryVerticalEnd,
   LayoutDashboard,
   Files,
-  UploadCloud,
-  FileText,
   ListChecks,
-  BarChart3,
   Settings2,
-  Cpu,
-  PlugZap,
   Users2,
-  ScrollText,
 } from "lucide-react";
 
 import { NavMain } from "@/components/nav-main"

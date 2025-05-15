@@ -1,7 +1,6 @@
 // src/pages/Dashboard.tsx
 
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 
 import { AppSidebar } from "@/components/app-sidebar";
 import { Separator } from "@/components/ui/separator";
@@ -33,7 +32,6 @@ interface ApiResponse {
 }
 
 export default function Dashboard() {
-  const navigate = useNavigate();
 
   const [templateName, setTemplateName] = useState("");
   const [description, setDescription] = useState("");
