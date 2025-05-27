@@ -39,10 +39,6 @@ export default function LoginPage() {
 
       toast.success("Logged in successfully!");
 
-      localStorage.setItem("user", JSON.stringify(response.user));
-      console.log("Token:", response.access_token);
-
-      // Typically store token in localStorage/sessionStorage or context
       localStorage.setItem("token", response.access_token);
 
       dispatch(login({

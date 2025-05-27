@@ -38,7 +38,7 @@ export const data = {
   navMain : [
   {
     title: "Dashboard",
-    url: "#",
+    url: "/dashboard",
     icon: LayoutDashboard,
   },
   {
@@ -47,15 +47,16 @@ export const data = {
     icon: Files,
     items: [
       { title: "Templates", url: "#" },
-      { title: "Create a Template", url: "#" },
-      { title: "Upload File", url: "#" },
-      { title: "All Documents", url: "#" },
+      { title: "Create a Template", url: "/templates/create" },
+      { title: "Upload File", url: "/templates/upload" },
+      { title: "All Documents", url: "/templates/review" },
     ],
   },
   {
     title: "Operations",
     url: "#",
     icon: ListChecks,
+    disabled: true,
     items: [
       { title: "Process Queue", url: "#" },
       { title: "Reports", url: "#" },
@@ -65,6 +66,7 @@ export const data = {
     title: "Configurations",
     url: "#",
     icon: Settings2,
+    disabled: true,
     items: [
       { title: "Validation Rules", url: "#" },
       { title: "AI Models & OCR Config", url: "#" },
@@ -75,6 +77,7 @@ export const data = {
     title: "Admin & Security",
     url: "#",
     icon: Users2,
+    disabled: true,
     items: [
       { title: "User Management", url: "#" },
       { title: "Audit Logs", url: "#" },

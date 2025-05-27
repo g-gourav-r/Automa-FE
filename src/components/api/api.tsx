@@ -14,7 +14,7 @@ interface ApiCallParams {
 
 const createApiCall = (url: string, method: HttpMethod) => {
   return (params: ApiCallParams = {}): Promise<any> => {
-    let apiEndpoint = `https://invoice-parser-image-669034154292.asia-south1.run.app/${url}`;
+    let apiEndpoint = `https://invoice-parser-image-669034154292.asia-south1.run.app/docs${url}`;
     const { body, urlParams, pathVariables, headers = {} } = params;
 
     // Handle URL parameters
@@ -35,10 +35,6 @@ const createApiCall = (url: string, method: HttpMethod) => {
       ...(isFormData ? {} : { 'Content-Type': 'application/json' }),
       ...headers,
     };
-
-    console.log("Sending request to:", apiEndpoint);
-    console.log("Request Method:", method.toUpperCase());
-    console.log("Request Headers:", requestHeaders); // Added console log for headers
 
     return fetch(apiEndpoint, {
       method,

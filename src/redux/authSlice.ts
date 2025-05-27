@@ -1,50 +1,37 @@
-// src/redux/authSlice.ts
-
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-
-interface User {
-  id: string;
-  email: string;
-  // add any other user fields your API returns
-}
 
 interface AuthState {
   isAuthenticated: boolean;
   token: string | null;
-  user: User | null;
+  isLoading: boolean;  // add loading flag
 }
 
 const initialState: AuthState = {
   isAuthenticated: false,
   token: null,
-  user: null,
+  isLoading: true, // initially loading
 };
 
 const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    // called when login is successful
     login: (
       state,
-      action: PayloadAction<{
-        token: string;
-      }>
+      action: PayloadAction<{ token: string }>
     ) => {
       state.isAuthenticated = true;
       state.token = action.payload.token;
     },
-    // called when logging out
     logout: (state) => {
       state.isAuthenticated = false;
       state.token = null;
-      state.user = null;
+    },
+    setLoading: (state, action: PayloadAction<boolean>) => {
+      state.isLoading = action.payload;
     },
   },
 });
 
-// these are the action creators you import elsewhere:
-export const { login, logout } = authSlice.actions;
-
-// this is what you plug into your store:
+export const { login, logout, setLoading } = authSlice.actions;
 export default authSlice.reducer;
