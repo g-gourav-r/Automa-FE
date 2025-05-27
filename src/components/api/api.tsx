@@ -14,7 +14,7 @@ interface ApiCallParams {
 
 const createApiCall = (url: string, method: HttpMethod) => {
   return (params: ApiCallParams = {}): Promise<any> => {
-    let apiEndpoint = `https://invoice-parser-image-669034154292.asia-south1.run.app/docs${url}`;
+    let apiEndpoint = `https://invoice-parser-image-669034154292.asia-south1.run.app/${url}`;
     const { body, urlParams, pathVariables, headers = {} } = params;
 
     // Handle URL parameters
