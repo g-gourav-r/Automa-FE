@@ -23,7 +23,7 @@ interface ApiResponseData {
       ai_extraction?: {
         key_values: Array<{ key: string; value: string }>;
       };
-      ai_annotated_image: string;
+      ai_annotated_image_url: string;
     }>;
   };
   template_id?: string | number;
@@ -292,7 +292,7 @@ export default function Dashboard() {
                           </div>
                           <TransformComponent>
                             <img
-                              src={page.ai_annotated_image}
+                              src={page.ai_annotated_image_url}
                               alt={`Annotated page ${page.page}`}
                               className="w-full h-auto cursor-grab"
                             />
