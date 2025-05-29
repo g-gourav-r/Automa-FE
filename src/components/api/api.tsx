@@ -1,3 +1,5 @@
+import { toast } from 'sonner';
+
 export const GET = 'get';
 export const POST = 'post';
 export const PUT = 'put';
@@ -43,6 +45,14 @@ const createApiCall = (url: string, method: HttpMethod) => {
     })
       .then(async (res) => {
         const resp = await res.json();
+
+            if (res.status === 401) {
+      toast.error('Session expired. Please sign in again.');
+      setTimeout(() => {
+        window.location.href = '/session-expired';
+      }, 1500);
+      return Promise.reject(resp);
+    }
         if (res.ok) return Promise.resolve(resp);
         return Promise.reject(resp);
       });

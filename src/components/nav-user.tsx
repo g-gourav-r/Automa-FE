@@ -1,4 +1,4 @@
-"use client"
+import { useNavigate } from "react-router-dom";
 
 import {
   BadgeCheck,
@@ -40,6 +40,13 @@ export function NavUser({
   }
 }) {
   const { isMobile } = useSidebar()
+
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.clear(); // Clear all local storage data
+    navigate("/auth/login"); // Redirect to login page
+  };
 
   return (
     <SidebarMenu>
@@ -102,7 +109,7 @@ export function NavUser({
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={handleLogout}>
               <LogOut />
               Log out
             </DropdownMenuItem>

@@ -1,20 +1,49 @@
-import { ReactNode } from "react";
-import { useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
-import { RootState } from "@/redux/store";
+import { toast } from "react-toastify";
+import { ReactNode } from "react";
+import { jwtDecode } from "jwt-decode";
+import { UserProvider } from "@/contexts/UserContext";
 
-interface ProtectedRouteProps {
-  children: ReactNode;
-}
+type JwtPayload = {
+  exp: number;
+  [key: string]: any;
+};
 
-export default function ProtectedRoute({ children }: ProtectedRouteProps) {
-  const { isAuthenticated, isLoading } = useSelector(
-    (state: RootState) => state.auth
-  );
+const ProtectedRoute = ({ children }: { children: ReactNode }) => {
+  const appData = JSON.parse(localStorage.getItem("appData") || "{}");
+  const token = appData.token || null;
 
-  if (isLoading) {
-    return <div>Loading...</div>; // Or a spinner component
+  if (!token) {
+    return <Navigate to="/auth/login" />;
   }
 
-  return isAuthenticated ? children : <Navigate to="/auth/login" replace />;
-}
+  try {
+    const decodedToken: JwtPayload = jwtDecode(token);
+    const currentTime = Math.floor(Date.now() / 1000);
+    console.log(decodedToken.exp);
+    console.log(currentTime);
+
+    if (decodedToken.exp < currentTime) {
+      localStorage.removeItem("appData");
+      toast.error("Your session has expired.", {
+        autoClose: 3000,
+      });
+
+      setTimeout(() => {
+        return <Navigate to="/session-expired" />;
+      }, 3000);
+
+      return null;
+    }
+  } catch (error) {
+    return <Navigate to="/auth/login" />;
+  }
+
+  return (
+    <UserProvider>
+      {children}
+    </UserProvider>
+  );
+};
+
+export default ProtectedRoute;

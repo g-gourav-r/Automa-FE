@@ -56,7 +56,9 @@ export default function FileUpload() {
   );
 
   useEffect(() => {
-    const token = localStorage.getItem("token") || "";
+    const appData = JSON.parse(localStorage.getItem("appData") || "{}");
+    const token = appData.token || null;
+
     setLoadingTemplates(true);
 
     listTemplates({
@@ -93,7 +95,8 @@ export default function FileUpload() {
   };
 
   const fetchTemplateContent = (templateId: string | number) => {
-    const token = localStorage.getItem("token") || "";
+    const appData = JSON.parse(localStorage.getItem("appData") || "{}");
+    const token = appData.token || null;
     if (
       templateId === null ||
       templateId === undefined ||
@@ -146,7 +149,8 @@ export default function FileUpload() {
       return;
     }
 
-    const token = localStorage.getItem("token") || "";
+    const appData = JSON.parse(localStorage.getItem("appData") || "{}");
+    const token = appData.token || null;
 
     const formData = new FormData();
     formData.append("file", files[0]);

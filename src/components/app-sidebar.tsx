@@ -22,12 +22,9 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
 
+import { useUser } from "@/contexts/UserContext";
+
 export const data = {
-  user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
-  },
   teams: [
     {
       name: "Automa",
@@ -87,6 +84,19 @@ export const data = {
 ],
 };
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const {user} = useUser();
+
+  const navUserData = user
+    ? {
+        name: `${user.first_name} ${user.last_name}`,
+        email: user.email,
+        avatar: "/avatars/shadcn.jpg", // or user.avatar if you have it
+      }
+    : {
+        name: "Guest",
+        email: "guest@example.com",
+        avatar: "/avatars/default.jpg",
+      };
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
@@ -108,7 +118,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavMain items={data.navMain} />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <NavUser user={navUserData} />
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>

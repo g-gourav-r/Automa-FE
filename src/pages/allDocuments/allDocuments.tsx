@@ -50,7 +50,8 @@ export default function AllDocuments() {
 
   // Effect to load templates on component mount
   useEffect(() => {
-    const token = localStorage.getItem("token") || "";
+    const appData = JSON.parse(localStorage.getItem("appData") || "{}");
+    const token = appData.token || null;
     setLoadingTemplates(true);
     listTemplates({
       headers: { Authorization: `Bearer ${token}` },
@@ -70,7 +71,8 @@ export default function AllDocuments() {
 
   // Fetch Extraction Results
   const fetchTemplateEntries = (templateId: string | number) => {
-    const token = localStorage.getItem("token") || "";
+    const appData = JSON.parse(localStorage.getItem("appData") || "{}");
+    const token = appData.token || null;
     if (!templateId) {
       toast.error("Please select a template");
       return;
