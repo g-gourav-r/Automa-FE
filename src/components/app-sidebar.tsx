@@ -1,16 +1,5 @@
-import * as React from "react"
-import {
-  Layers,
-  GalleryVerticalEnd,
-  LayoutDashboard,
-  Files,
-  ListChecks,
-  Settings2,
-  Users2,
-} from "lucide-react";
-
-import { NavMain } from "@/components/nav-main"
-import { NavUser } from "@/components/nav-user"
+import { NavMain } from "@/components/nav-main";
+import { NavUser } from "@/components/nav-user";
 import {
   Sidebar,
   SidebarContent,
@@ -20,9 +9,18 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "@/components/ui/sidebar"
-
+} from "@/components/ui/sidebar";
 import { useUser } from "@/contexts/UserContext";
+import {
+  Layers,
+  GalleryVerticalEnd,
+  LayoutDashboard,
+  Files,
+  ListChecks,
+  Settings2,
+  Users2,
+} from "lucide-react";
+import * as React from "react";
 
 export const data = {
   teams: [
@@ -32,59 +30,60 @@ export const data = {
       plan: "Enterprise",
     },
   ],
-  navMain : [
-  {
-    title: "Dashboard",
-    url: "/dashboard",
-    icon: LayoutDashboard,
-  },
-  {
-    title: "Document Management",
-    url: "#",
-    icon: Files,
-    items: [
-      { title: "Templates", url: "#" },
-      { title: "Create a Template", url: "/templates/create" },
-      { title: "Upload File", url: "/templates/upload" },
-      { title: "All Documents", url: "/templates/review" },
-    ],
-  },
-  {
-    title: "Operations",
-    url: "#",
-    icon: ListChecks,
-    disabled: true,
-    items: [
-      { title: "Process Queue", url: "#" },
-      { title: "Reports", url: "#" },
-    ],
-  },
-  {
-    title: "Configurations",
-    url: "#",
-    icon: Settings2,
-    disabled: true,
-    items: [
-      { title: "Validation Rules", url: "#" },
-      { title: "AI Models & OCR Config", url: "#" },
-      { title: "API Keys & Integrations", url: "#" },
-    ],
-  },
-  {
-    title: "Admin & Security",
-    url: "#",
-    icon: Users2,
-    disabled: true,
-    items: [
-      { title: "User Management", url: "#" },
-      { title: "Audit Logs", url: "#" },
-      { title: "Settings", url: "#" },
-    ],
-  },
-],
+  navMain: [
+    {
+      title: "Dashboard",
+      url: "/dashboard",
+      icon: LayoutDashboard,
+    },
+    {
+      title: "Document Management",
+      url: "#",
+      icon: Files,
+      items: [
+        { title: "Templates", url: "#" },
+        { title: "Create a Template", url: "/templates/create" },
+        { title: "Upload File", url: "/templates/upload" },
+        { title: "Entries", url: "/templates/review" },
+        { title: "Processing Status", url: "/templates/processing-status" },
+      ],
+    },
+    {
+      title: "Operations",
+      url: "#",
+      icon: ListChecks,
+      disabled: true,
+      items: [
+        { title: "Process Queue", url: "#" },
+        { title: "Reports", url: "#" },
+      ],
+    },
+    {
+      title: "Configurations",
+      url: "#",
+      icon: Settings2,
+      disabled: true,
+      items: [
+        { title: "Validation Rules", url: "#" },
+        { title: "AI Models & OCR Config", url: "#" },
+        { title: "API Keys & Integrations", url: "#" },
+      ],
+    },
+    {
+      title: "Admin & Security",
+      url: "#",
+      icon: Users2,
+      disabled: true,
+      items: [
+        { title: "User Management", url: "#" },
+        { title: "Audit Logs", url: "#" },
+        { title: "Settings", url: "#" },
+      ],
+    },
+  ],
 };
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const {user} = useUser();
+  const { user } = useUser();
 
   const navUserData = user
     ? {
@@ -101,14 +100,16 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
         <SidebarMenu>
-            <SidebarMenuItem>
-                <SidebarMenuButton
-                    asChild
-                    className="data-[slot=sidebar-menu-button]:!p-1.5"
-                  >
+          <SidebarMenuItem>
+            <SidebarMenuButton
+              asChild
+              className="data-[slot=sidebar-menu-button]:!p-1.5"
+            >
               <a href="#">
                 <GalleryVerticalEnd className="h-5 w-5" />
-                <span className="font-bold text-xl text-purple-600">Automa</span>
+                <span className="font-bold text-xl text-purple-600">
+                  Automa
+                </span>
               </a>
             </SidebarMenuButton>
           </SidebarMenuItem>
@@ -122,5 +123,5 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>
-  )
+  );
 }

@@ -1,20 +1,18 @@
-import React from "react";
-import { Routes, Route } from "react-router-dom";
-
 // Route protection wrapper
 import ProtectedRoute from "@/Routes/ProtectedRoutes";
-
+import InvoiceParser from "@/pages/InvoiceParser";
+import SessionExpired from "@/pages/SessionExpired/SessionExpired";
+import AllDocuments from "@/pages/allDocuments/allDocuments";
 // Public pages
 import LoginPage from "@/pages/auth/login";
 import RegisterPage from "@/pages/auth/register";
-import SessionExpired from "@/pages/SessionExpired/SessionExpired";
-
+import CreateTemplate from "@/pages/createTemplate/createTemplate";
 // Protected pages
 import Dashboard from "@/pages/dashboard/dashboard";
 import FileUpload from "@/pages/fileUpload/FileUpload";
-import InvoiceParser from "@/pages/InvoiceParser";
-import CreateTemplate from "@/pages/createTemplate/createTemplate";
-import AllDocuments from "@/pages/allDocuments/allDocuments";
+import ParsingStatus from "@/pages/parsingStatus/ParsingStatus";
+import React from "react";
+import { Routes, Route } from "react-router-dom";
 
 const protectedRoutes = [
   { path: "/dashboard", element: <Dashboard /> },
@@ -23,11 +21,12 @@ const protectedRoutes = [
   { path: "/review", element: <InvoiceParser /> },
   { path: "/templates/create", element: <CreateTemplate /> },
   { path: "/templates/review", element: <AllDocuments /> },
+  { path: "/templates/processing-status", element: <ParsingStatus /> },
 ];
 
 /**
  * AppRoutes component
- * 
+ *
  * Defines the application's routing structure, including both public and protected routes.
  *
  * @returns {React.ReactElement} The route configuration for the app.

@@ -1,8 +1,8 @@
+import { UserProvider } from "@/contexts/UserContext";
+import { jwtDecode } from "jwt-decode";
+import { ReactNode } from "react";
 import { Navigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { ReactNode } from "react";
-import { jwtDecode } from "jwt-decode";
-import { UserProvider } from "@/contexts/UserContext";
 
 type JwtPayload = {
   exp: number;
@@ -20,8 +20,6 @@ const ProtectedRoute = ({ children }: { children: ReactNode }) => {
   try {
     const decodedToken: JwtPayload = jwtDecode(token);
     const currentTime = Math.floor(Date.now() / 1000);
-    console.log(decodedToken.exp);
-    console.log(currentTime);
 
     if (decodedToken.exp < currentTime) {
       localStorage.removeItem("appData");
@@ -39,11 +37,7 @@ const ProtectedRoute = ({ children }: { children: ReactNode }) => {
     return <Navigate to="/auth/login" />;
   }
 
-  return (
-    <UserProvider>
-      {children}
-    </UserProvider>
-  );
+  return <UserProvider>{children}</UserProvider>;
 };
 
 export default ProtectedRoute;

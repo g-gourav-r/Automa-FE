@@ -1,42 +1,41 @@
-
-import { useState } from "react";
-import { Link } from "react-router-dom";
-import { 
-  SidebarProvider, 
-  Sidebar, 
-  SidebarContent, 
-  SidebarHeader, 
-  SidebarGroup, 
-  SidebarGroupContent, 
-  SidebarMenu, 
-  SidebarMenuItem, 
-  SidebarMenuButton 
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  SidebarProvider,
+  Sidebar,
+  SidebarContent,
+  SidebarHeader,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarMenu,
+  SidebarMenuItem,
+  SidebarMenuButton,
 } from "@/components/ui/sidebar";
-import { 
-  FileText, 
-  Upload, 
-  Settings, 
+import {
+  FileText,
+  Upload,
+  Settings,
   User,
   LogOut,
   PlusSquare,
-  Brain
+  Brain,
 } from "lucide-react";
-import { 
-  DropdownMenu, 
-  DropdownMenuContent, 
-  DropdownMenuItem, 
-  DropdownMenuSeparator, 
-  DropdownMenuTrigger 
-} from "@/components/ui/dropdown-menu";
-import { Button } from "@/components/ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useState } from "react";
+import { Link } from "react-router-dom";
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
 }
 
 export function DashboardLayout({ children }: DashboardLayoutProps) {
-//   const navigate = useNavigate();
+  //   const navigate = useNavigate();
   const [userMenuOpen, setUserMenuOpen] = useState(false);
 
   const handleLogout = () => {
@@ -59,7 +58,10 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
                 <SidebarMenu>
                   <SidebarMenuItem>
                     <SidebarMenuButton asChild>
-                      <Link to="/dashboard/upload" className="flex items-center gap-2">
+                      <Link
+                        to="/dashboard/upload"
+                        className="flex items-center gap-2"
+                      >
                         <Upload className="h-4 w-4" />
                         <span>Upload Files</span>
                       </Link>
@@ -67,7 +69,10 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
                   </SidebarMenuItem>
                   <SidebarMenuItem>
                     <SidebarMenuButton asChild>
-                      <Link to="/dashboard/document-types" className="flex items-center gap-2">
+                      <Link
+                        to="/dashboard/document-types"
+                        className="flex items-center gap-2"
+                      >
                         <PlusSquare className="h-4 w-4" />
                         <span>Add Document Type</span>
                       </Link>
@@ -75,15 +80,21 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
                   </SidebarMenuItem>
                   <SidebarMenuItem>
                     <SidebarMenuButton asChild>
-                      <Link to="/dashboard/all-documents" className="flex items-center gap-2">
+                      <Link
+                        to="/dashboard/all-documents"
+                        className="flex items-center gap-2"
+                      >
                         <FileText className="h-4 w-4" />
-                        <span>All Documents</span>
+                        <span>Entries</span>
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                   <SidebarMenuItem>
                     <SidebarMenuButton asChild>
-                      <Link to="/dashboard/ai-models" className="flex items-center gap-2">
+                      <Link
+                        to="/dashboard/ai-models"
+                        className="flex items-center gap-2"
+                      >
                         <Brain className="h-4 w-4" />
                         <span>AI Models</span>
                       </Link>
@@ -91,7 +102,10 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
                   </SidebarMenuItem>
                   <SidebarMenuItem>
                     <SidebarMenuButton asChild>
-                      <Link to="/dashboard/settings" className="flex items-center gap-2">
+                      <Link
+                        to="/dashboard/settings"
+                        className="flex items-center gap-2"
+                      >
                         <Settings className="h-4 w-4" />
                         <span>Settings</span>
                       </Link>
@@ -106,12 +120,20 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
           <div className="border-b">
             <div className="flex h-16 items-center justify-between px-6">
               <div className="flex items-center">
-                <Link to="/dashboard" className="font-semibold hover:underline">Dashboard</Link>
+                <Link to="/dashboard" className="font-semibold hover:underline">
+                  Dashboard
+                </Link>
               </div>
               <div className="flex items-center gap-4">
-                <DropdownMenu open={userMenuOpen} onOpenChange={setUserMenuOpen}>
+                <DropdownMenu
+                  open={userMenuOpen}
+                  onOpenChange={setUserMenuOpen}
+                >
                   <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+                    <Button
+                      variant="ghost"
+                      className="relative h-8 w-8 rounded-full"
+                    >
                       <Avatar className="h-8 w-8">
                         <AvatarImage src="/placeholder.svg" alt="User" />
                         <AvatarFallback>JD</AvatarFallback>
@@ -129,8 +151,8 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
                     </div>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem asChild>
-                      <Link 
-                        to="/dashboard/settings/profile" 
+                      <Link
+                        to="/dashboard/settings/profile"
                         className="cursor-pointer flex w-full items-center"
                       >
                         <User className="mr-2 h-4 w-4" />
@@ -138,8 +160,8 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
-                      <Link 
-                        to="/dashboard/settings" 
+                      <Link
+                        to="/dashboard/settings"
                         className="cursor-pointer flex w-full items-center"
                       >
                         <Settings className="mr-2 h-4 w-4" />
@@ -147,7 +169,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem 
+                    <DropdownMenuItem
                       className="cursor-pointer flex items-center"
                       onClick={handleLogout}
                     >
@@ -159,9 +181,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
               </div>
             </div>
           </div>
-          <div className="container mx-auto py-6 px-4">
-            {children}
-          </div>
+          <div className="container mx-auto py-6 px-4">{children}</div>
         </main>
       </div>
     </SidebarProvider>
