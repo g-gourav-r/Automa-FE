@@ -53,7 +53,7 @@ export default function ParsingStatus() {
   // Setup WebSocket connection for live updates
   useEffect(() => {
     const ws = new WebSocket(
-      "ws://invoice-parser-image-669034154292.asia-south1.run.app/ws/status"
+      "wss://automa-cloud-run-tasks-669034154292.asia-south1.run.app/ws/status"
     ); // Update this URL
 
     ws.onopen = () => {

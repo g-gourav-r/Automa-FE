@@ -21,7 +21,7 @@ const badgeVariants: Variants = {
       ease: "easeInOut",
       repeat: Infinity,
       repeatType: "loop",
-      delay:0.2,
+      delay: 0.2,
     },
   },
 };
@@ -53,7 +53,6 @@ const BadgeCheck = ({
   stroke = "#ffffff",
   ...props
 }: BadgeCheckProps) => {
-
   return (
     <div
       style={{
@@ -68,7 +67,8 @@ const BadgeCheck = ({
         xmlns="http://www.w3.org/2000/svg"
         width={width}
         height={height}
-        viewBox="0 0 24 24"
+        viewBox="0 0 30 30"
+        style={{ overflow: "visible" }}
         fill="none"
         stroke={stroke}
         strokeWidth={strokeWidth}
@@ -85,7 +85,7 @@ const BadgeCheck = ({
         <motion.path
           d="m9 12 2 2 4-4"
           variants={checkVariants}
-          animate="animate"
+          // animate="animate"
           initial="normal"
         />
       </svg>

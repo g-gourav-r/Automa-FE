@@ -1,5 +1,10 @@
-
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 interface AuthLayoutProps {
   children: React.ReactNode;
@@ -12,8 +17,10 @@ export function AuthLayout({ children, title, description }: AuthLayoutProps) {
     <div className="h-screen flex items-center justify-center bg-gradient-to-br from-purple-50 to-indigo-50">
       <Card className="w-[380px] shadow-lg">
         <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl font-bold tracking-tight">{title}</CardTitle>
-          <CardDescription className="text-sm text-muted-foreground">
+          <CardTitle className="text-2xl font-bold tracking-tight text-center">
+            {title}
+          </CardTitle>
+          <CardDescription className="text-sm text-muted-foreground text-center">
             {description}
           </CardDescription>
         </CardHeader>

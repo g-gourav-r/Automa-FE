@@ -43,7 +43,14 @@ export const data = {
       items: [
         { title: "Templates", url: "#" },
         { title: "Create a Template", url: "/templates/create" },
-        { title: "Upload File", url: "/templates/upload" },
+        {
+          title: "Upload File",
+          url: "/templates/upload",
+          items: [
+            { title: "Single Upload", url: "/templates/upload/single" },
+            { title: "Bulk Upload", url: "/templates/upload/bulk" },
+          ],
+        },
         { title: "Entries", url: "/templates/review" },
         { title: "Processing Status", url: "/templates/processing-status" },
       ],

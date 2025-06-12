@@ -1,11 +1,12 @@
-import { ReactNode} from "react";
 import { AppSidebar } from "@/components/app-sidebar";
+import { Separator } from "@/components/ui/separator";
 import {
   SidebarInset,
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
-import { Separator } from "@/components/ui/separator";
+import { ReactNode } from "react";
+
 interface MainLayoutProps {
   children: ReactNode;
   title?: string;
@@ -24,9 +25,7 @@ export function MainLayout({ children, title = "Dashboard" }: MainLayoutProps) {
           </div>
         </header>
 
-        <main className="p-6">
-          {children}
-        </main>
+        <main className="p-6">{children}</main>
       </SidebarInset>
     </SidebarProvider>
   );

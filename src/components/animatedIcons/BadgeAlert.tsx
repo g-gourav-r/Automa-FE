@@ -1,6 +1,7 @@
 "use client";
 
-import { motion } from "motion/react"; // Removed useAnimation
+import { motion } from "motion/react";
+// Removed useAnimation
 import type { Variants } from "motion/react";
 
 interface BadgeAlertProps extends React.SVGAttributes<SVGSVGElement> {

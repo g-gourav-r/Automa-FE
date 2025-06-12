@@ -52,7 +52,7 @@ export default function FileUpload() {
   const [modalOpen, setModalOpen] = useState(false);
 
   // API calls
-  const listTemplates = createApiCall("template/list-templates/", GET);
+  const listTemplates = createApiCall("document-templates", GET);
   const getTemplateContent = createApiCall(
     "template/get-template/{template_id}",
     GET

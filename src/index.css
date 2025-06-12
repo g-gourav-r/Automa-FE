@@ -118,3 +118,31 @@
     @apply bg-background text-foreground;
   }
 }
+
+
+/* Custom scrollbar styling */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #a855f7 #f3e8ff; /* purple-600 on light purple bg */
+}
+
+/* Webkit (Chrome, Edge, Safari) */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #f3e8ff; /* purple-50 */
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #a855f7; /* purple-600 */
+  border-radius: 10px;
+  border: 2px solid #f3e8ff; /* match track padding */
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: #9333ea; /* purple-700 on hover */
+}

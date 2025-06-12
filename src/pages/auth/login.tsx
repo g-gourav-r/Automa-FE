@@ -1,14 +1,25 @@
-import { useState } from "react";
+import createApiCall, { POST } from "@/components/api/api";
 import { AuthLayout } from "@/components/auth/AuthLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import {
+  Mail,
+  Lock,
+  AlertCircle,
+  Eye,
+  EyeOff,
+  CheckCircle,
+} from "lucide-react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Mail, Lock, AlertCircle, Eye, EyeOff, CheckCircle } from "lucide-react";
 import { toast } from "sonner";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import createApiCall, { POST } from "@/components/api/api";
-
 
 export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
@@ -18,41 +29,33 @@ export default function LoginPage() {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-
   const loginUser = createApiCall("auth/login", POST);
 
-const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
-  setIsLoading(true);
-  setError("");
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setError("");
 
-  try {
-    const response = await loginUser({
-      body: {
-        email,
-        password,
-      },
-    });
-    toast.custom(() => (
-  <div
-    className="flex items-center gap-3 rounded-lg border border-purple-500 bg-purple-50 text-purple-800 p-4 shadow-lg"
-  >
-    <CheckCircle className="text-purple-600" />
-    <span>Successfully logged in!</span>
-  </div>
-));
-    const appData = JSON.parse(localStorage.getItem("appData") || "{}");
-    appData.token = response.access_token;
-    localStorage.setItem("appData", JSON.stringify(appData));
-    navigate("/dashboard");
-  } catch (err: any) {
-    console.error(err);
-    setError(err.detail || "Login failed.");
-  } finally {
-    setIsLoading(false);
-  }
-};
-
+    try {
+      const response = await loginUser({
+        body: {
+          email,
+          password,
+        },
+      });
+      toast.success("Successfully logged in!");
+      const appData = JSON.parse(localStorage.getItem("appData") || "{}");
+      appData.token = response.access_token;
+      appData.refreshToken = response.refresh_token;
+      localStorage.setItem("appData", JSON.stringify(appData));
+      navigate("/dashboard");
+    } catch (err: any) {
+      console.error(err);
+      setError(err.detail || "Login failed.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <AuthLayout
@@ -92,7 +95,9 @@ const handleSubmit = async (e: React.FormEvent) => {
                       Forgot password?
                     </button>
                   </TooltipTrigger>
-                  <TooltipContent>This feature is unavailable in demo mode.</TooltipContent>
+                  <TooltipContent>
+                    This feature is unavailable in demo mode.
+                  </TooltipContent>
                 </Tooltip>
               </TooltipProvider>
             </div>
@@ -113,7 +118,11 @@ const handleSubmit = async (e: React.FormEvent) => {
                 onClick={() => setShowPassword(!showPassword)}
                 tabIndex={-1}
               >
-                {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                {showPassword ? (
+                  <EyeOff className="h-5 w-5" />
+                ) : (
+                  <Eye className="h-5 w-5" />
+                )}
               </button>
             </div>
           </div>
@@ -150,7 +159,9 @@ const handleSubmit = async (e: React.FormEvent) => {
                 Create Account
               </Button>
             </TooltipTrigger>
-            <TooltipContent>This feature is unavailable in demo mode.</TooltipContent>
+            <TooltipContent>
+              This feature is unavailable in demo mode.
+            </TooltipContent>
           </Tooltip>
         </TooltipProvider>
       </div>

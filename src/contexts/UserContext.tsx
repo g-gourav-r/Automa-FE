@@ -1,5 +1,11 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
-import createApiCall, {GET} from "@/components/api/api";
+import createApiCall, { GET } from "@/components/api/api";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  ReactNode,
+} from "react";
 
 type User = {
   first_name: string;
@@ -27,30 +33,29 @@ export const useUser = () => {
 export const UserProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
 
-useEffect(() => {
-  const storedUser = localStorage.getItem("userProfile");
-  const appData = JSON.parse(localStorage.getItem("appData") || "{}");
-  const token = appData.token;
+  useEffect(() => {
+    const storedUser = localStorage.getItem("userProfile");
+    const appData = JSON.parse(localStorage.getItem("appData") || "{}");
+    const token = appData.token;
 
-  if (storedUser) {
-    setUser(JSON.parse(storedUser));
-  } else if (token) {
-    const getProfile = createApiCall("me/profile", GET);
-    getProfile({
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then((response) => {
-        setUser(response);
-        localStorage.setItem("userProfile", JSON.stringify(response)); // cache it
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    } else if (token) {
+      const getProfile = createApiCall("users/me", GET);
+      getProfile({
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       })
-      .catch((error) => {
-        console.error("Failed to fetch user data", error);
-      });
-  }
-}, []);
-
+        .then((response) => {
+          setUser(response);
+          localStorage.setItem("userProfile", JSON.stringify(response)); // cache it
+        })
+        .catch((error) => {
+          console.error("Failed to fetch user data", error);
+        });
+    }
+  }, []);
 
   return (
     <UserContext.Provider value={{ user, setUser }}>
