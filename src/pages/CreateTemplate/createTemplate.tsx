@@ -6,8 +6,8 @@ import createApiCall, { POST } from "@/components/api/api";
 import { Breadcrumb } from "@/components/common/Breadcrumb";
 import { PdfViewer } from "@/components/common/PdfViewer";
 import { Button } from "@/components/ui/button";
-import React, { useState, FormEvent } from "react";
-import { useNavigate } from "react-router-dom";
+// Button import is kept, as it's used internally by sub-components
+import { useState, FormEvent } from "react";
 import { toast } from "sonner";
 
 /**
@@ -46,15 +46,15 @@ export default function CreateTemplate() {
   const [templateName, setTemplateName] = useState("");
   const [description, setDescription] = useState("");
   const [pdfFile, setPdfFile] = useState<File | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [saving, setSaving] = useState(false);
+  const [loading, setLoading] = useState(false); // For initial template processing
+  const [saving, setSaving] = useState(false); // For final template saving
   const [error, setError] = useState<string | null>(null);
   const [originalBLOB, setOriginalBLOB] = useState("");
   const [annotatedBLOB, setAnnotatedBLOB] = useState("");
+
+  // States to control step rendering, as before
   const [showFieldSelection, setShowFieldSelection] = useState(false);
   const [templateProcessed, setTemplateProcessed] = useState(false);
-  const [showConfirmDialog, setShowConfirmDialog] = useState(false);
-
   const [selectedItems, setSelectedItems] = useState<Record<string, string>>(
     {}
   );
@@ -62,7 +62,8 @@ export default function CreateTemplate() {
   const [apiResponseData, setApiResponseData] =
     useState<ApiResponseData | null>(null);
 
-  const steps = ["Upload", "Verify", "Create"];
+  // Updated breadcrumb step names
+  const steps = ["Template Details", "Field Selection", "Create Template"];
   const extractionMethod = "AI + OCR Based"; // Hardcoded for Automa V1.0
 
   const createTemplateApi = createApiCall(
@@ -75,9 +76,9 @@ export default function CreateTemplate() {
    * Returns the current step label based on workflow flags.
    */
   const getCurrentStep = () => {
-    if (templateProcessed) return "Create";
-    if (showFieldSelection) return "Verify";
-    return "Upload";
+    if (templateProcessed) return "Create Template";
+    if (showFieldSelection) return "Field Selection";
+    return "Template Details";
   };
 
   /**
@@ -109,6 +110,7 @@ export default function CreateTemplate() {
       return;
     }
 
+    setLoading(true); // Indicate loading for processing
     try {
       const formData = new FormData();
       formData.append("file", pdfFile);
@@ -116,28 +118,23 @@ export default function CreateTemplate() {
       formData.append("template_description", description);
 
       const appData = JSON.parse(localStorage.getItem("appData") || "{}");
-      setLoading(true);
 
-      await createTemplateApi({
+      const res = await createTemplateApi({
         headers: { Authorization: `Bearer ${appData.token}` },
         body: formData,
-      })
-        .then((res) => {
-          setApiResponseData(res);
-          setOriginalBLOB(res.blobs.original_file);
-          setAnnotatedBLOB(res.blobs.annotated_file);
-          setShowFieldSelection(true);
-        })
-        .catch((err) => {
-          console.error("API error:", err);
-          const message =
-            typeof err === "string"
-              ? err
-              : err?.detail || err?.message || "Something went wrong";
-          toast.error(message);
-        });
-    } catch (error: any) {
-      toast.error(error?.message || "Failed to create template.");
+      });
+
+      setApiResponseData(res);
+      setOriginalBLOB(res.blobs.original_file);
+      setAnnotatedBLOB(res.blobs.annotated_file);
+      setShowFieldSelection(true);
+    } catch (err: any) {
+      console.error("API error:", err);
+      const message =
+        typeof err === "string"
+          ? err
+          : err?.detail || err?.message || "Something went wrong";
+      toast.error(message);
     } finally {
       setLoading(false);
     }
@@ -147,6 +144,7 @@ export default function CreateTemplate() {
    * Handles final save of the template with selected fields.
    */
   const handleSaveTemplate = async () => {
+    setSaving(true); // Indicate saving
     try {
       const formData = new FormData();
       formData.append("template_name", templateName);
@@ -158,25 +156,21 @@ export default function CreateTemplate() {
       formData.append("annotated_pdf_temp_gcs_link", annotatedBLOB);
 
       const appData = JSON.parse(localStorage.getItem("appData") || "{}");
-      setSaving(true);
 
       await saveTemplateApi({
         headers: { Authorization: `Bearer ${appData.token}` },
         body: formData,
-      })
-        .then((res) => {
-          console.log(res);
-        })
-        .catch((err) => {
-          console.error("API error:", err);
-          const message =
-            typeof err === "string"
-              ? err
-              : err?.detail || err?.message || "Something went wrong";
-          toast.error(message);
-        });
-    } catch (error: any) {
-      toast.error(error?.message || "Failed to save template.");
+      });
+
+      toast.success("Template saved successfully!");
+      setTemplateProcessed(true);
+    } catch (err: any) {
+      console.error("API error:", err);
+      const message =
+        typeof err === "string"
+          ? err
+          : err?.detail || err?.message || "Something went wrong";
+      toast.error(message);
     } finally {
       setSaving(false);
     }
@@ -186,27 +180,10 @@ export default function CreateTemplate() {
     <MainLayout title="Create Template">
       <div className="flex items-center justify-between mb-4">
         <Breadcrumb steps={steps} currentStep={getCurrentStep()} />
-        {showFieldSelection && !templateProcessed && apiResponseData && (
-          <div className="space-x-2">
-            <Button
-              variant="outline"
-              onClick={() => setShowConfirmDialog(true)}
-              disabled={saving}
-              className="px-4 py-2 text-sm rounded border border-gray-300 text-gray-600 hover:bg-gray-50"
-            >
-              Back
-            </Button>
-            <Button
-              className="px-4 py-2 text-sm rounded bg-purple-600 text-white hover:bg-purple-700"
-              onClick={handleSaveTemplate}
-              disabled={saving}
-            >
-              Next
-            </Button>
-          </div>
-        )}
       </div>
 
+      {/* Step 0: Template Details Form */}
+      {/* Renders when neither field selection nor template processing is active */}
       {!showFieldSelection && !templateProcessed && (
         <TemplateForm
           templateName={templateName}
@@ -222,10 +199,12 @@ export default function CreateTemplate() {
         />
       )}
 
-      {!saving ? (
-        showFieldSelection &&
+      {/* Step 1: Field Selection and PDF Viewer */}
+      {/* Renders when field selection is active and template is not yet processed */}
+      {showFieldSelection &&
         !templateProcessed &&
-        apiResponseData && (
+        apiResponseData &&
+        (!saving ? (
           <div className="flex h-[90vh] bg-gray-50 overflow-hidden">
             {/* Sidebar */}
             <div className="w-1/3 flex flex-col shadow border-gray-200 border rounded-lg mr-2 bg-white">
@@ -234,12 +213,24 @@ export default function CreateTemplate() {
               </div>
               <div className="flex-1 overflow-auto p-3">
                 <TemplateFieldSelection
-                  keyValues={apiResponseData.template_data.map(
-                    ({ key, value }) => ({ key, value })
-                  )}
+                  keyValues={
+                    apiResponseData.template_data.map(({ key, value }) => ({
+                      key,
+                      value,
+                    })) || []
+                  }
                   selectedItems={selectedItems}
                   onChange={handleFieldChange}
                 />
+              </div>
+              <div className="p-3 border-t border-gray-200 flex justify-end bg-white">
+                <Button
+                  className="px-4 py-2 text-sm rounded bg-purple-600 text-white hover:bg-purple-700"
+                  onClick={handleSaveTemplate}
+                  disabled={saving}
+                >
+                  Save Template
+                </Button>
               </div>
             </div>
 
@@ -255,14 +246,16 @@ export default function CreateTemplate() {
               </div>
             </div>
           </div>
-        )
-      ) : (
-        <div className="flex h-[90vh] bg-gray-50 overflow-hidden">
-          <div className="w-full inset-0 flex items-center justify-center bg-white bg-opacity-70 z-50">
-            <div className="animate-spin rounded-full h-16 w-16 border-4 border-purple-500 border-t-transparent"></div>
+        ) : (
+          <div className="flex h-[90vh] bg-gray-50 overflow-hidden">
+            <div className="w-full inset-0 flex items-center justify-center bg-white bg-opacity-70 z-50">
+              <div className="animate-spin rounded-full h-16 w-16 border-4 border-purple-500 border-t-transparent"></div>
+            </div>
           </div>
-        </div>
-      )}
+        ))}
+
+      {/* Step 2: Completion / Confirmation */}
+      {/* Renders when template processing is complete */}
       {templateProcessed && (
         <TemplateSaveConfirmation template_name={templateName} />
       )}

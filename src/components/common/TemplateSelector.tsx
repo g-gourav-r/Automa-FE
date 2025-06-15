@@ -13,6 +13,7 @@ import { toast } from "sonner";
 type Template = {
   template_id: string | number;
   template_name: string;
+  template_data: { [key: string]: any };
 };
 
 type TemplateSelectorProps = {
@@ -79,7 +80,7 @@ export function TemplateSelector({
             key={template.template_id}
             value={String(template.template_id)}
           >
-            {template.template_name}
+            {template.template_name} - {template.template_id}
           </SelectItem>
         ))}
       </SelectContent>

@@ -37,7 +37,16 @@ export function FileUploadArea({
       const droppedFiles = Array.from(e.dataTransfer.files);
       const totalFiles = files.length + droppedFiles.length;
       if (totalFiles > maxFiles) {
-        toast.error(`You can upload a maximum of ${maxFiles} files.`);
+        toast.error(
+          `You can upload a maximum of ${maxFiles} ${
+            maxFiles === 1 ? "file" : "files"
+          }.${
+            maxFiles === 1
+              ? " Use Bulk upload to upload more than one file."
+              : ""
+          }`
+        );
+
         return;
       }
       setFiles((prev) => [...prev, ...droppedFiles]);
@@ -47,7 +56,14 @@ export function FileUploadArea({
 
   const handleBrowseClick = () => {
     if (files.length >= maxFiles) {
-      toast.error(`Maximum ${maxFiles} files allowed.`);
+      toast.error(
+        `You can upload a maximum of ${maxFiles} ${
+          maxFiles === 1 ? "file" : "files"
+        }.${
+          maxFiles === 1 ? " Use Bulk upload to upload more than one file." : ""
+        }`
+      );
+
       return;
     }
     document.getElementById("file-upload")?.click();

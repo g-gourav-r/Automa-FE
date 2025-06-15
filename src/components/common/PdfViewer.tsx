@@ -60,19 +60,13 @@ export const PdfViewer: React.FC<PdfViewerProps> = ({ pdfUrl }) => {
     isDragging.current = false;
   };
 
-  function zoomOut(
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ): void {
+  function zoomOut(): void {
     setScale((prev) => Math.max(0.25, prev - 0.1));
   }
-  function zoomIn(
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ): void {
+  function zoomIn(): void {
     setScale((prev) => Math.min(3, prev + 0.1));
   }
-  function resetZoom(
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ): void {
+  function resetZoom(): void {
     setScale(1);
   }
   return (

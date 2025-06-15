@@ -1,12 +1,26 @@
-import { useState } from "react";
 import { AuthLayout } from "@/components/auth/AuthLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import {
+  Mail,
+  Lock,
+  User,
+  Building,
+  AlertCircle,
+  Phone,
+  Eye,
+  EyeOff,
+} from "lucide-react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Mail, Lock, User, Building, AlertCircle, Phone, Eye, EyeOff } from "lucide-react";
 import { toast } from "sonner";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 export default function RegisterPage() {
   const [isLoading, setIsLoading] = useState(false);
@@ -144,7 +158,11 @@ export default function RegisterPage() {
                 onClick={() => setShowPassword(!showPassword)}
                 className="absolute right-3 top-2.5 text-muted-foreground"
               >
-                {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                {showPassword ? (
+                  <EyeOff className="h-5 w-5" />
+                ) : (
+                  <Eye className="h-5 w-5" />
+                )}
               </button>
             </div>
           </div>
@@ -168,7 +186,9 @@ export default function RegisterPage() {
                     />
                   </div>
                 </TooltipTrigger>
-                <TooltipContent>This field is unavailable in demo mode.</TooltipContent>
+                <TooltipContent>
+                  This field is unavailable in demo mode.
+                </TooltipContent>
               </Tooltip>
             </TooltipProvider>
           </div>

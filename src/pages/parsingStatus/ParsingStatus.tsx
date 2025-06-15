@@ -21,7 +21,7 @@ type FileProcessingStatusType = {
 
 export default function ParsingStatus() {
   // API call setup
-  const listStatus = createApiCall("template/file-processing-statuses/", GET);
+  const listStatus = createApiCall("document-processing/statuses", GET);
 
   // State for results and loading
   const [results, setResults] = useState<FileProcessingStatusType[]>([]);

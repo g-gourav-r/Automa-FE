@@ -1,51 +1,108 @@
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { useState } from "react";
 
-type ParsedDataModalProps = {
-  parsedData: Record<string, string>;
-  open: boolean;
-  onClose: () => void;
+type ExtractionResult = {
+  result_id: number;
+  template_id: number;
+  source_file_name: string | null;
+  parsed_data: Record<string, any>;
+  created_at: string;
 };
 
-export function ParsedDataModal({ parsedData, open, onClose }: ParsedDataModalProps) {
+type CollapsibleParsedDataTableProps = {
+  entries: ExtractionResult[];
+};
+
+export function CollapsibleParsedDataTable({
+  entries,
+}: CollapsibleParsedDataTableProps) {
+  const [selectedEntry, setSelectedEntry] = useState<ExtractionResult | null>(
+    null
+  );
+
+  if (!entries || entries.length === 0) {
+    return (
+      <p className="text-muted-foreground text-sm">No entries to display.</p>
+    );
+  }
+
   return (
-    <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="max-w-3xl">
-        <DialogHeader>
-          <DialogTitle>Parsed Data</DialogTitle>
-        </DialogHeader>
-        <div className="overflow-x-auto">
-          <table className="w-full border border-gray-300 rounded-md">
-            <thead>
-              <tr className="bg-gray-100">
-                {Object.keys(parsedData).map((key) => (
-                  <th
-                    key={key}
-                    className="border border-gray-300 px-4 py-2 text-left text-sm font-medium text-gray-700"
-                  >
-                    {key}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                {Object.values(parsedData).map((value, idx) => (
-                  <td
-                    key={idx}
-                    className="border border-gray-300 px-4 py-2 text-sm text-gray-800"
-                  >
-                    {value}
-                  </td>
-                ))}
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <div className="flex justify-end pt-4">
-          <Button onClick={onClose}>Close</Button>
-        </div>
-      </DialogContent>
-    </Dialog>
+    <div className="flex gap-6">
+      {/* Sidebar / Collapsible Entry List */}
+      <Accordion type="single" collapsible className="w-72">
+        {entries.map((entry) => (
+          <AccordionItem
+            value={`item-${entry.result_id}`}
+            key={entry.result_id}
+          >
+            <AccordionTrigger>Entry {entry.result_id}</AccordionTrigger>
+            <AccordionContent>
+              <div className="text-sm space-y-1 mb-3">
+                <div>
+                  <strong>Result ID:</strong> {entry.result_id}
+                </div>
+                <div>
+                  <strong>Source File:</strong> {entry.source_file_name}
+                </div>
+                <div>
+                  <strong>Created At:</strong>{" "}
+                  {new Date(entry.created_at).toLocaleString()}
+                </div>
+              </div>
+              <button
+                onClick={() => setSelectedEntry(entry)}
+                className="px-3 py-1 rounded bg-purple-600 text-white hover:bg-purple-700 transition text-xs"
+              >
+                View Parsed Data
+              </button>
+            </AccordionContent>
+          </AccordionItem>
+        ))}
+      </Accordion>
+
+      {/* Parsed Data Table */}
+      <div className="flex-1">
+        {selectedEntry ? (
+          <div>
+            <h2 className="text-lg font-semibold mb-4">
+              Parsed Data for Entry {selectedEntry.result_id}
+            </h2>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  {Object.keys(selectedEntry.parsed_data).map((key) => (
+                    <TableHead key={key}>{key}</TableHead>
+                  ))}
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                <TableRow>
+                  {Object.values(selectedEntry.parsed_data).map(
+                    (value, idx) => (
+                      <TableCell key={idx}>{value ?? "-"}</TableCell>
+                    )
+                  )}
+                </TableRow>
+              </TableBody>
+            </Table>
+          </div>
+        ) : (
+          <p className="text-muted-foreground">Select an entry to view data.</p>
+        )}
+      </div>
+    </div>
   );
 }

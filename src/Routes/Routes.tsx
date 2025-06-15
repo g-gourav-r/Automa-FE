@@ -9,6 +9,7 @@ import RegisterPage from "@/pages/auth/register";
 // Protected pages
 import Dashboard from "@/pages/dashboard/dashboard";
 import ParsingStatus from "@/pages/parsingStatus/ParsingStatus";
+import ListTemplates from "@/pages/templates/ListTemplates";
 import UploadBulk from "@/pages/templates/UploadBulk";
 import FileUpload from "@/pages/templates/UploadSelect";
 import UploadSingle from "@/pages/templates/UploadSingle";
@@ -16,12 +17,20 @@ import React from "react";
 import { Routes, Route } from "react-router-dom";
 
 const protectedRoutes = [
-  { path: "/dashboard", element: <Dashboard /> },
-  { path: "/", element: <Dashboard /> },
-  { path: "/templates/upload", element: <FileUpload /> },
-  { path: "/templates/create", element: <CreateTemplate /> },
   { path: "/templates/review", element: <AllDocuments /> },
   { path: "/templates/processing-status", element: <ParsingStatus /> },
+
+  // Create template
+  { path: "/templates/create", element: <CreateTemplate /> },
+  // List templates
+  { path: "/templates", element: <ListTemplates /> },
+
+  // Generic
+  { path: "/", element: <Dashboard /> },
+  { path: "/dashboard", element: <Dashboard /> },
+
+  // File Uploads
+  { path: "/templates/upload", element: <FileUpload /> },
   { path: "/templates/upload/bulk", element: <UploadBulk /> },
   { path: "/templates/upload/single", element: <UploadSingle /> },
 ];

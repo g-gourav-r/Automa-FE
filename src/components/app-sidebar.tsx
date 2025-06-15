@@ -41,7 +41,7 @@ export const data = {
       url: "#",
       icon: Files,
       items: [
-        { title: "Templates", url: "#" },
+        { title: "Templates", url: "/templates" },
         { title: "Create a Template", url: "/templates/create" },
         {
           title: "Upload File",
