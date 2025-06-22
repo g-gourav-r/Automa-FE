@@ -52,7 +52,8 @@ export const data = {
       icon: Archive,
       items: [
         { title: "Upload File", url: "/document/upload" },
-        { title: "My Documents", url: "/documents/review" },
+        { title: "My Documents", url: "/documents" },
+        { title: "Review Documents", url: "/documents/review" },
         { title: "Processing Status", url: "/templates/processing-status" },
       ],
     },

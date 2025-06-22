@@ -7,6 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { useNavigate } from "react-router-dom";
 
 /* ---------- Types ---------- */
 export type DocumentSummary = {
@@ -50,6 +51,8 @@ const DocumentCard = ({
     original_file_gcs_link,
     annotated_file_gcs_link,
   } = summary;
+
+  const navigate = useNavigate();
 
   return (
     <Card className="mb-4 shadow-md hover:shadow-lg transition-shadow">
@@ -100,7 +103,15 @@ const DocumentCard = ({
               View Template Data
             </Button>
           )}
-
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => navigate("/document/upload")}
+          >
+            Upload
+          </Button>
+        </div>
+        <div className="mt-4 flex flex-wrap gap-2 justify-end">
           {/* View Original File Button */}
           {original_file_gcs_link && (
             <Button
