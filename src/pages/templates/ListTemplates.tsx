@@ -1,5 +1,5 @@
 import { MainLayout } from "@/components/MainLayout";
-import createApiCall, { GET } from "@/components/api/api";
+import createApiCall, { GET, POST } from "@/components/api/api";
 import { PdfViewer } from "@/components/common/PdfViewer";
 import { Button } from "@/components/ui/button";
 import {
@@ -18,6 +18,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 type Template = {
   template_id: string | number;
@@ -39,16 +40,22 @@ const ListTemplates = () => {
   const [pdfUrlToView, setPdfUrlToView] = useState("");
   const [pdfModalTitle, setPdfModalTitle] = useState("");
 
+  // Use the defined response type for better type safety
+  const getSignedUrlApi = createApiCall("document/signed-access-url", POST);
+
   useEffect(() => {
     const fetchTemplates = async () => {
       try {
         const listTemplatesAPI = createApiCall("document-templates", GET);
         const appDataString = localStorage.getItem("appData") || "";
-        if (!appDataString)
+        if (!appDataString) {
           throw new Error("No appData found in localStorage.");
+        }
         const appData = JSON.parse(appDataString);
         const token = appData.token;
-        if (!token) throw new Error("Authentication token not found.");
+        if (!token) {
+          throw new Error("Authentication token not found.");
+        }
 
         const response = await listTemplatesAPI({
           headers: { Authorization: `Bearer ${token}` },
@@ -77,10 +84,59 @@ const ListTemplates = () => {
     setIsTemplateDataModalOpen(true);
   };
 
-  const handleViewPdf = (url: string, title: string) => {
-    setPdfUrlToView(url);
-    setPdfModalTitle(title);
-    setIsPdfModalOpen(true);
+  // Mark handleViewPdf as async
+  const handleViewPdf = async (url: string, title: string) => {
+    try {
+      // Immediately set modal to open and clear previous URL for better UX
+      setPdfUrlToView("");
+      setPdfModalTitle(title);
+      setIsPdfModalOpen(true);
+
+      const appDataString = localStorage.getItem("appData");
+      let token = "";
+      if (appDataString) {
+        try {
+          const appData = JSON.parse(appDataString);
+          token = appData.token;
+        } catch (parseError) {
+          console.error(
+            "Failed to parse appData from localStorage:",
+            parseError
+          );
+          toast.error("Authentication data is corrupted. Please log in again.");
+          setIsPdfModalOpen(false); // Close modal on auth error
+          return; // Stop execution
+        }
+      } else {
+        toast.error("Authentication data not found. Please log in.");
+        setIsPdfModalOpen(false); // Close modal on auth error
+        return; // Stop execution
+      }
+
+      const formData = new FormData();
+      formData.append("file_path", url);
+      const payload = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: formData,
+      };
+
+      console.log("Calling getSignedUrlApi with payload:", payload);
+      const response = await getSignedUrlApi(payload);
+
+      setPdfUrlToView(response.signed_url);
+    } catch (error) {
+      console.error("Failed to get signed URL for PDF:", error);
+      toast.error(
+        `Failed to load PDF: ${
+          error instanceof Error && error.message
+            ? error.message
+            : "An unexpected error occurred. Please try again."
+        }`
+      );
+      setIsPdfModalOpen(false); // Close modal on any error during PDF loading
+    }
   };
 
   if (loading) {
@@ -248,11 +304,14 @@ const ListTemplates = () => {
               Viewing the document. You can zoom and pan.
             </DialogDescription>
           </DialogHeader>
-          <div className="flex-1 w-full h-[calc(90vh-140px)]">
+          <div className="flex-1 w-full h-[calc(90vh-140px)] overflow-auto">
             {pdfUrlToView ? (
               <PdfViewer pdfUrl={pdfUrlToView} />
             ) : (
-              <p className="text-center text-red-500">No PDF URL provided.</p>
+              <p className="text-center text-gray-500">
+                Loading PDF... If it takes too long or fails, check your
+                network.
+              </p>
             )}
           </div>
         </DialogContent>

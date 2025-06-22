@@ -16,7 +16,7 @@ interface ApiCallParams {
 
 const createApiCall = (url: string, method: HttpMethod) => {
   return async (params: ApiCallParams = {}): Promise<any> => {
-    let apiEndpoint = `https://automa-api-669034154292.asia-south1.run.app/${url}`;
+    let apiEndpoint = `http://127.0.0.1:8000/${url}`;
     const { body, urlParams, pathVariables, headers = {} } = params;
 
     // Append URL params

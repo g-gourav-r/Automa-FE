@@ -1,11 +1,17 @@
-import { useNavigate } from "react-router-dom";
-import { FilePlus, UploadCloud, BarChart2 } from "lucide-react";
+import { MainLayout } from "@/components/MainLayout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
-import { MainLayout } from "@/components/MainLayout";
+import { FilePlus, UploadCloud, BarChart2 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
-function DashboardCard({ icon: Icon, title, subtitle, buttonText, onClick }: {
+function DashboardCard({
+  icon: Icon,
+  title,
+  subtitle,
+  buttonText,
+  onClick,
+}: {
   icon: any;
   title: string;
   subtitle: string;
@@ -61,7 +67,7 @@ export default function Dashboard() {
             title="Upload & Process File"
             subtitle="Effortlessly process and extract data from your documents."
             buttonText="Upload File"
-            onClick={() => navigate("/templates/upload")}
+            onClick={() => navigate("/document/upload")}
           />
           <DashboardCard
             icon={BarChart2}

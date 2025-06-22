@@ -22,7 +22,7 @@ export const TemplateSaveConfirmation = ({
         </p>
         <Button
           onClick={() => {
-            navigate("/upload");
+            navigate("/document/upload");
           }}
           className="mt-4 px-6 py-2.5 text-sm font-medium rounded-lg bg-purple-600 text-white hover:bg-purple-700 transition"
         >

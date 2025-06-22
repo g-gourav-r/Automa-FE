@@ -1,6 +1,7 @@
 // Route protection wrapper
 import ProtectedRoute from "@/Routes/ProtectedRoutes";
 import CreateTemplate from "@/pages/CreateTemplate/createTemplate";
+import MyDocuments from "@/pages/MyDocuments/MyDocuments";
 import SessionExpired from "@/pages/SessionExpired/SessionExpired";
 import AllDocuments from "@/pages/allDocuments/allDocuments";
 // Public pages
@@ -17,7 +18,7 @@ import React from "react";
 import { Routes, Route } from "react-router-dom";
 
 const protectedRoutes = [
-  { path: "/templates/review", element: <AllDocuments /> },
+  { path: "/documents/review", element: <AllDocuments /> },
   { path: "/templates/processing-status", element: <ParsingStatus /> },
 
   // Create template
@@ -28,11 +29,12 @@ const protectedRoutes = [
   // Generic
   { path: "/", element: <Dashboard /> },
   { path: "/dashboard", element: <Dashboard /> },
+  { path: "/documents", element: <MyDocuments /> },
 
   // File Uploads
-  { path: "/templates/upload", element: <FileUpload /> },
-  { path: "/templates/upload/bulk", element: <UploadBulk /> },
-  { path: "/templates/upload/single", element: <UploadSingle /> },
+  { path: "/document/upload", element: <FileUpload /> },
+  { path: "/document/upload/bulk", element: <UploadBulk /> },
+  { path: "/document/upload/single", element: <UploadSingle /> },
 ];
 
 /**

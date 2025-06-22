@@ -76,7 +76,7 @@ export default function AllDocuments() {
   };
 
   return (
-    <MainLayout title="Document Entries">
+    <MainLayout title="My Documents">
       <div className="mb-6 flex justify-between">
         <Breadcrumb
           steps={breadcrumbSteps}
