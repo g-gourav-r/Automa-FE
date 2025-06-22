@@ -10,10 +10,7 @@ export default function UploadSelect() {
   return (
     <MainLayout title="Upload Files">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-6">
-        <Card
-          role="button"
-          onClick={() => navigate("/templates/upload/single")}
-        >
+        <Card role="button" onClick={() => navigate("/document/upload/single")}>
           <CardContent className="p-6 flex flex-col items-center">
             <FileUp />
             <h2 className="text-xl text-purple-500 font-semibold mb-4">
@@ -28,7 +25,7 @@ export default function UploadSelect() {
           </CardContent>
         </Card>
 
-        <Card role="button" onClick={() => navigate("/templates/upload/bulk")}>
+        <Card role="button" onClick={() => navigate("/document/upload/bulk")}>
           <CardContent className="p-6 flex flex-col items-center">
             <FolderUp />
             <h2 className="text-xl text-purple-500 font-semibold mb-4">

@@ -15,9 +15,10 @@ import {
   Layers,
   GalleryVerticalEnd,
   LayoutDashboard,
-  Files,
+  Archive,
   ListChecks,
   Settings2,
+  FileText,
   Users2,
 } from "lucide-react";
 import * as React from "react";
@@ -37,21 +38,21 @@ export const data = {
       icon: LayoutDashboard,
     },
     {
+      title: "Template Management",
+      url: "#",
+      icon: FileText,
+      items: [
+        { title: "Create a Template", url: "/templates/create" },
+        { title: "Templates", url: "/templates" },
+      ],
+    },
+    {
       title: "Document Management",
       url: "#",
-      icon: Files,
+      icon: Archive,
       items: [
-        { title: "Templates", url: "/templates" },
-        { title: "Create a Template", url: "/templates/create" },
-        {
-          title: "Upload File",
-          url: "/templates/upload",
-          items: [
-            { title: "Single Upload", url: "/templates/upload/single" },
-            { title: "Bulk Upload", url: "/templates/upload/bulk" },
-          ],
-        },
-        { title: "Entries", url: "/templates/review" },
+        { title: "Upload File", url: "/document/upload" },
+        { title: "My Documents", url: "/documents/review" },
         { title: "Processing Status", url: "/templates/processing-status" },
       ],
     },

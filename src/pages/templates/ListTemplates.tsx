@@ -304,7 +304,7 @@ const ListTemplates = () => {
               Viewing the document. You can zoom and pan.
             </DialogDescription>
           </DialogHeader>
-          <div className="flex-1 w-full h-[calc(90vh-140px)]">
+          <div className="flex-1 w-full h-[calc(90vh-140px)] overflow-auto">
             {pdfUrlToView ? (
               <PdfViewer pdfUrl={pdfUrlToView} />
             ) : (
