@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { FileUp, Upload, X } from "lucide-react";
-import { useCallback, useState } from "react";
+import { useCallback, useState, useRef } from "react";
+// Import useRef
 import { toast } from "sonner";
 
 type FileUploadAreaProps = {
@@ -19,6 +20,7 @@ export function FileUploadArea({
   maxFiles = 5,
 }: FileUploadAreaProps) {
   const [isDragging, setIsDragging] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null); // Create a ref
 
   const handleDragOver = useCallback((e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
@@ -46,7 +48,6 @@ export function FileUploadArea({
               : ""
           }`
         );
-
         return;
       }
       setFiles((prev) => [...prev, ...droppedFiles]);
@@ -54,7 +55,11 @@ export function FileUploadArea({
     [files, setFiles, maxFiles]
   );
 
-  const handleBrowseClick = () => {
+  const handleBrowseClick = (e?: React.MouseEvent) => {
+    // Make event optional for consistent calling
+    if (e) {
+      e.stopPropagation(); // Stop propagation for the button click
+    }
     if (files.length >= maxFiles) {
       toast.error(
         `You can upload a maximum of ${maxFiles} ${
@@ -63,10 +68,9 @@ export function FileUploadArea({
           maxFiles === 1 ? " Use Bulk upload to upload more than one file." : ""
         }`
       );
-
       return;
     }
-    document.getElementById("file-upload")?.click();
+    fileInputRef.current?.click(); // Use the ref to trigger click
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -75,9 +79,17 @@ export function FileUploadArea({
       const totalFiles = files.length + selectedFiles.length;
       if (totalFiles > maxFiles) {
         toast.error(`You can upload a maximum of ${maxFiles} files.`);
-        return;
+        // Don't return here if you want to clear the input even if maxFiles is exceeded
+        // If you want to keep the selected files in the input until the user takes action,
+        // then keep the return here.
+      } else {
+        setFiles((prev) => [...prev, ...selectedFiles]);
       }
-      setFiles((prev) => [...prev, ...selectedFiles]);
+
+      // 💡 Crucial fix: Clear the input's value
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
     }
   };
 
@@ -97,7 +109,7 @@ export function FileUploadArea({
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
-        onClick={handleBrowseClick}
+        onClick={() => handleBrowseClick()} // Call without event for div click
         onKeyDown={(e) => {
           if (e.key === "Enter" || e.key === " ") handleBrowseClick();
         }}
@@ -111,7 +123,7 @@ export function FileUploadArea({
         </p>
         <Button
           variant="outline"
-          onClick={handleBrowseClick}
+          onClick={handleBrowseClick} // Keep this as is, the event will be passed
           disabled={isUploading}
         >
           Browse Files
@@ -123,6 +135,7 @@ export function FileUploadArea({
           className="hidden"
           onChange={handleFileChange}
           aria-hidden="true"
+          ref={fileInputRef} // Assign the ref here
         />
       </div>
 
