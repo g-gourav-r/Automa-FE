@@ -6,12 +6,11 @@ import createApiCall, { POST } from "@/components/api/api";
 import { Breadcrumb } from "@/components/common/Breadcrumb";
 import { PdfViewer } from "@/components/common/PdfViewer";
 import { Button } from "@/components/ui/button";
-// Button import is kept, as it's used internally by sub-components
 import { useState, FormEvent } from "react";
 import { toast } from "sonner";
 
 /**
- * Interface representing a template data item.
+ * Interface representing a template data item (general key-value).
  */
 export interface TemplateDataItem {
   key: string;
@@ -25,11 +24,24 @@ export interface TemplateDataItem {
 }
 
 /**
+ * Interface representing a single line item.
+ */
+interface LineItem {
+  Particulars: string;
+  Qty: string;
+  Rate: string;
+  Amount: string;
+  position?: { x: number; y: number; w: number; h: number }; // Optional, if you get it from API
+}
+
+/**
  * Interface representing API response data for the template creation flow.
+ * UPDATED: Added line_items
  */
 export interface ApiResponseData {
   message: string;
   template_data: TemplateDataItem[];
+  line_items: LineItem[]; // Added line_items here
   original_temp_pdf_gcs_link: string;
   annotated_temp_pdf_link: string;
   template_name: string;
@@ -59,6 +71,7 @@ export default function CreateTemplate() {
     {}
   );
 
+  // Initialize apiResponseData with null or a default structure
   const [apiResponseData, setApiResponseData] =
     useState<ApiResponseData | null>(null);
 
@@ -119,7 +132,8 @@ export default function CreateTemplate() {
 
       const appData = JSON.parse(localStorage.getItem("appData") || "{}");
 
-      const res = await createTemplateApi({
+      const res: ApiResponseData = await createTemplateApi({
+        // Type the response
         headers: { Authorization: `Bearer ${appData.token}` },
         body: formData,
       });
@@ -183,7 +197,6 @@ export default function CreateTemplate() {
       </div>
 
       {/* Step 0: Template Details Form */}
-      {/* Renders when neither field selection nor template processing is active */}
       {!showFieldSelection && !templateProcessed && (
         <TemplateForm
           templateName={templateName}
@@ -200,10 +213,9 @@ export default function CreateTemplate() {
       )}
 
       {/* Step 1: Field Selection and PDF Viewer */}
-      {/* Renders when field selection is active and template is not yet processed */}
       {showFieldSelection &&
         !templateProcessed &&
-        apiResponseData &&
+        apiResponseData && // Ensure apiResponseData is not null
         (!saving ? (
           <div className="flex h-[90vh] bg-gray-50 overflow-hidden">
             {/* Sidebar */}
@@ -219,6 +231,7 @@ export default function CreateTemplate() {
                       value,
                     })) || []
                   }
+                  lineItems={apiResponseData.line_items || []} // Pass line_items here, with fallback
                   selectedItems={selectedItems}
                   onChange={handleFieldChange}
                 />
@@ -255,7 +268,6 @@ export default function CreateTemplate() {
         ))}
 
       {/* Step 2: Completion / Confirmation */}
-      {/* Renders when template processing is complete */}
       {templateProcessed && (
         <TemplateSaveConfirmation template_name={templateName} />
       )}
