@@ -12,18 +12,27 @@ import {
 } from "@/components/ui/sidebar";
 import { useUser } from "@/contexts/UserContext";
 import {
-  Layers,
-  GalleryVerticalEnd,
   LayoutDashboard,
-  Archive,
-  ListChecks,
-  Settings2,
+  FilePlus,
   FileText,
-  Users2,
+  Upload,
+  Folder,
+  Eye,
+  Loader,
+  ListChecks,
+  BarChart2,
+  CheckCircle2,
+  Brain,
+  Key,
+  Users,
+  ScrollText,
+  Layers,
+  Settings,
+  GalleryVerticalEnd, // <--- Added this import
 } from "lucide-react";
 import * as React from "react";
 
-export const data = {
+export const data = { // Corrected object definition
   teams: [
     {
       name: "Automa",
@@ -31,66 +40,93 @@ export const data = {
       plan: "Enterprise",
     },
   ],
-  navMain: [
+  navMain: [ // Changed from NavMain = to navMain:
     {
       title: "Dashboard",
       url: "/dashboard",
       icon: LayoutDashboard,
     },
     {
-      title: "Template Management",
-      url: "#",
+      title: "Create a Template",
+      url: "/templates/create",
+      icon: FilePlus,
+    },
+    {
+      title: "Templates",
+      url: "/templates",
       icon: FileText,
-      items: [
-        { title: "Create a Template", url: "/templates/create" },
-        { title: "Templates", url: "/templates" },
-      ],
     },
     {
-      title: "Document Management",
-      url: "#",
-      icon: Archive,
-      items: [
-        { title: "Upload File", url: "/document/upload" },
-        { title: "My Documents", url: "/documents" },
-        { title: "Review Documents", url: "/documents/review" },
-        { title: "Processing Status", url: "/templates/processing-status" },
-      ],
+      title: "Upload File",
+      url: "/document/upload",
+      icon: Upload,
     },
     {
-      title: "Operations",
+      title: "My Documents",
+      url: "/documents",
+      icon: Folder,
+    },
+    {
+      title: "Review Documents",
+      url: "/documents/review",
+      icon: Eye,
+    },
+    {
+      title: "Processing Status",
+      url: "/templates/processing-status",
+      icon: Loader,
+    },
+    {
+      title: "Process Queue",
       url: "#",
       icon: ListChecks,
       disabled: true,
-      items: [
-        { title: "Process Queue", url: "#" },
-        { title: "Reports", url: "#" },
-      ],
     },
     {
-      title: "Configurations",
+      title: "Reports",
       url: "#",
-      icon: Settings2,
+      icon: BarChart2,
       disabled: true,
-      items: [
-        { title: "Validation Rules", url: "#" },
-        { title: "AI Models & OCR Config", url: "#" },
-        { title: "API Keys & Integrations", url: "#" },
-      ],
     },
     {
-      title: "Admin & Security",
+      title: "Validation Rules",
       url: "#",
-      icon: Users2,
+      icon: CheckCircle2,
       disabled: true,
-      items: [
-        { title: "User Management", url: "#" },
-        { title: "Audit Logs", url: "#" },
-        { title: "Settings", url: "#" },
-      ],
+    },
+    {
+      title: "AI Models & OCR Config",
+      url: "#",
+      icon: Brain,
+      disabled: true,
+    },
+    {
+      title: "API Keys & Integrations",
+      url: "#",
+      icon: Key,
+      disabled: true,
+    },
+    {
+      title: "User Management",
+      url: "#",
+      icon: Users,
+      disabled: true,
+    },
+    {
+      title: "Audit Logs",
+      url: "#",
+      icon: ScrollText,
+      disabled: true,
+    },
+    {
+      title: "Settings",
+      url: "#",
+      icon: Settings,
+      disabled: true,
     },
   ],
-};
+}; // Corrected closing of data object
+
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { user } = useUser();
 
@@ -125,6 +161,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
+        {/* Make sure NavMain component correctly accepts an 'items' prop */}
         <NavMain items={data.navMain} />
       </SidebarContent>
       <SidebarFooter>

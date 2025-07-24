@@ -10,7 +10,8 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { Mail, Lock, AlertCircle, Eye, EyeOff } from "lucide-react";
-import { useState } from "react";
+import React, { useState } from "react";
+// Explicitly import React if not already
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
@@ -42,9 +43,13 @@ export default function LoginPage() {
       appData.refreshToken = response.refresh_token;
       localStorage.setItem("appData", JSON.stringify(appData));
       navigate("/dashboard");
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error(err);
-      setError(err.detail || "Login failed.");
+      if (err && typeof err === "object" && "detail" in err) {
+        setError((err as { detail?: string }).detail || "Login failed.");
+      } else {
+        setError("Login failed.");
+      }
     } finally {
       setIsLoading(false);
     }
@@ -52,9 +57,31 @@ export default function LoginPage() {
 
   return (
     <AuthLayout
-      title="Welcome to Automa"
+      title={
+        <div className="flex items-center justify-center">
+          <img
+            src="/optiextract_logo.png"
+            alt="OptiExtract Logo"
+            width={32}
+            height={32}
+            className="h-8 w-8 mr-1"
+          />
+          Opti<span className="text-purple-600">Extract</span>
+        </div>
+      }
       description="Intelligent document processing platform"
     >
+      {/* Background logo div - ensure z-index is correct for layering */}
+      <div
+        className="absolute inset-0 bg-no-repeat bg-right-bottom opacity-20"
+        style={{
+          backgroundImage: 'url("/optiextract_logo.png")',
+          filter: "blur(3px)", // Adjust the blur value as needed
+          backgroundSize: "200px", // Adjust the size of the logo as needed
+          zIndex: -1, // Ensure the logo is behind other content, if AuthLayout has a z-index
+        }}
+      ></div>
+
       <div className="grid gap-6">
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
