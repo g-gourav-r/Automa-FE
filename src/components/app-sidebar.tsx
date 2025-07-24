@@ -1,3 +1,4 @@
+import logo from "@/assets/optiextract_logo.png";
 import { NavMain } from "@/components/nav-main";
 import { NavUser } from "@/components/nav-user";
 import {
@@ -26,40 +27,23 @@ import {
   Key,
   Users,
   ScrollText,
-  Layers,
   Settings,
-  GalleryVerticalEnd, // <--- Added this import
 } from "lucide-react";
 import * as React from "react";
 
-export const data = { // Corrected object definition
+export const data = {
   teams: [
     {
-      name: "Automa",
-      logo: Layers,
+      name: "Optiextract",
+      logo: logo,
       plan: "Enterprise",
     },
   ],
-  navMain: [ // Changed from NavMain = to navMain:
+  navMain: [
     {
       title: "Dashboard",
       url: "/dashboard",
       icon: LayoutDashboard,
-    },
-    {
-      title: "Create a Template",
-      url: "/templates/create",
-      icon: FilePlus,
-    },
-    {
-      title: "Templates",
-      url: "/templates",
-      icon: FileText,
-    },
-    {
-      title: "Upload File",
-      url: "/document/upload",
-      icon: Upload,
     },
     {
       title: "My Documents",
@@ -67,9 +51,24 @@ export const data = { // Corrected object definition
       icon: Folder,
     },
     {
+      title: "Create a Template",
+      url: "/templates/create",
+      icon: FilePlus,
+    },
+    {
       title: "Review Documents",
       url: "/documents/review",
       icon: Eye,
+    },
+    {
+      title: "Upload File",
+      url: "/document/upload",
+      icon: Upload,
+    },
+    {
+      title: "Templates",
+      url: "/templates",
+      icon: FileText,
     },
     {
       title: "Processing Status",
@@ -125,7 +124,7 @@ export const data = { // Corrected object definition
       disabled: true,
     },
   ],
-}; // Corrected closing of data object
+};
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { user } = useUser();
@@ -134,15 +133,17 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     ? {
         name: `${user.first_name} ${user.last_name}`,
         email: user.email,
-        avatar: "/avatars/shadcn.jpg", // or user.avatar if you have it
+        avatar: "/avatars/shadcn.jpg",
       }
     : {
         name: "Guest",
         email: "guest@example.com",
         avatar: "/avatars/default.jpg",
       };
+
   return (
-    <Sidebar collapsible="icon" {...props}>
+    // The `group` class on the Sidebar itself is essential for Tailwind's data attributes
+    <Sidebar collapsible="icon" className="group" {...props}>
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
@@ -151,17 +152,24 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               className="data-[slot=sidebar-menu-button]:!p-1.5"
             >
               <a href="#">
-                <GalleryVerticalEnd className="h-5 w-5" />
-                <span className="font-bold text-xl text-purple-600">
-                  Automa
-                </span>
+                <div className="flex items-center justify-center text-lg">
+                  <img
+                    alt="OptiExtract Logo"
+                    // Apply transition for smooth scaling
+                    className="h-8 w-8 transition-all duration-200 ease-in-out group-data-[state=collapsed]:h-5 group-data-[state=collapsed]:w-5"
+                    src={logo}
+                  />
+                  {/* The text with conditional visibility */}
+                  <span className="font-bold whitespace-nowrap group-data-[state=collapsed]:hidden">
+                    Opti<span className="text-purple-600">Extract</span>
+                  </span>
+                </div>
               </a>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        {/* Make sure NavMain component correctly accepts an 'items' prop */}
         <NavMain items={data.navMain} />
       </SidebarContent>
       <SidebarFooter>
