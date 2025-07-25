@@ -2,7 +2,6 @@ import createApiCall, { POST } from "@/components/api/api";
 import { AuthLayout } from "@/components/auth/AuthLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import {
   Tooltip,
   TooltipContent,
@@ -71,27 +70,26 @@ export default function LoginPage() {
       }
       description="Intelligent document processing platform"
     >
-      {/* Background logo div - ensure z-index is correct for layering */}
+      {/* Background logo div*/}
       <div
         className="absolute inset-0 bg-no-repeat bg-right-bottom opacity-20"
         style={{
           backgroundImage: 'url("/optiextract_logo.png")',
-          filter: "blur(3px)", // Adjust the blur value as needed
-          backgroundSize: "200px", // Adjust the size of the logo as needed
-          zIndex: -1, // Ensure the logo is behind other content, if AuthLayout has a z-index
+          filter: "blur(3px)",
+          backgroundSize: "200px",
+          zIndex: -1,
         }}
       ></div>
 
       <div className="grid gap-6">
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
             <div className="relative">
               <Mail className="absolute left-3 top-2.5 h-5 w-5 text-muted-foreground" />
               <Input
                 id="email"
                 type="email"
-                placeholder="name@company.com"
+                placeholder="Email ID"
                 className="pl-10"
                 required
                 value={email}
@@ -102,25 +100,6 @@ export default function LoginPage() {
           </div>
 
           <div className="space-y-2">
-            <div className="flex items-center justify-between">
-              <Label htmlFor="password">Password</Label>
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <button
-                      type="button"
-                      className="text-xs text-purple-600 hover:text-purple-700 hover:underline cursor-not-allowed"
-                      disabled
-                    >
-                      Forgot password?
-                    </button>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    This feature is unavailable in demo mode.
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-            </div>
             <div className="relative">
               <Lock className="absolute left-3 top-2.5 h-5 w-5 text-muted-foreground" />
               <Input
@@ -128,6 +107,7 @@ export default function LoginPage() {
                 type={showPassword ? "text" : "password"}
                 className="pl-10 pr-10"
                 required
+                placeholder="Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 disabled={isLoading}
@@ -144,6 +124,24 @@ export default function LoginPage() {
                   <Eye className="h-5 w-5" />
                 )}
               </button>
+            </div>
+            <div className="flex items-center justify-end">
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <button
+                      type="button"
+                      className="text-xs text-purple-600 hover:text-purple-700 hover:underline cursor-not-allowed"
+                      disabled
+                    >
+                      Forgot password?
+                    </button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    This feature is unavailable in demo mode.
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
             </div>
           </div>
           {error && (
@@ -172,18 +170,13 @@ export default function LoginPage() {
           </div>
         </div>
 
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button variant="outline" className="w-full" disabled>
-                Create Account
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>
-              This feature is unavailable in demo mode.
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
+        <Button
+          variant="outline"
+          className="w-full"
+          onClick={() => navigate("/auth/register")}
+        >
+          Create Account
+        </Button>
       </div>
     </AuthLayout>
   );
