@@ -4,10 +4,12 @@ import CreateTemplate from "@/pages/CreateTemplate/createTemplate";
 import MyDocuments from "@/pages/MyDocuments/MyDocuments";
 import SessionExpired from "@/pages/SessionExpired/SessionExpired";
 import AllDocuments from "@/pages/allDocuments/allDocuments";
-import VerifyEmail from "@/pages/auth/VerifyEmail";
 // Public pages
 import LoginPage from "@/pages/auth/login";
 import RegisterPage from "@/pages/auth/register";
+import VerifyEmail from "@/pages/auth/VerifyEmail";
+import ResetPasswordPage from "@/pages/auth/ResetPassword";
+
 // Protected pages
 import Dashboard from "@/pages/dashboard/dashboard";
 import ParsingStatus from "@/pages/parsingStatus/ParsingStatus";
@@ -52,6 +54,7 @@ export default function AppRoutes(): React.ReactElement {
       <Route path="/auth/login" element={<LoginPage />} />
       <Route path="/auth/register" element={<RegisterPage />} />
       <Route path="/auth/verify-email" element={<VerifyEmail />} />
+      <Route path="/auth/reset-password" element={<ResetPasswordPage />} />
 
       {/* Generic public routes */}
       <Route path="/session-expired" element={<SessionExpired />} />

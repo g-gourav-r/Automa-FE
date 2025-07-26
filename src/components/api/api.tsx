@@ -12,12 +12,14 @@ interface ApiCallParams {
   urlParams?: Record<string, string>;
   pathVariables?: Record<string, string | number>;
   headers?: Record<string, string>;
+  isAuthEndpoint?: boolean; // NEW: Add a flag to indicate if this is an authentication endpoint
 }
 
 const createApiCall = (url: string, method: HttpMethod) => {
   return async (params: ApiCallParams = {}): Promise<any> => {
-    let apiEndpoint = `https://automa-api-669034154292.asia-south1.run.app/${url}`;
-    const { body, urlParams, pathVariables, headers = {} } = params;
+    let apiEndpoint = `http://localhost:8000/${url}`;
+    // Destructure isAuthEndpoint from params
+    const { body, urlParams, pathVariables, headers = {}, isAuthEndpoint = false } = params; // NEW: Default to false
 
     // Append URL params
     if (urlParams) {
@@ -36,6 +38,10 @@ const createApiCall = (url: string, method: HttpMethod) => {
     const isFormData = body instanceof FormData;
     const requestHeaders = {
       ...(isFormData ? {} : { "Content-Type": "application/json" }),
+      // Add Authorization header if a token exists and it's not an auth endpoint
+      ...(localStorage.getItem("appData") && !isAuthEndpoint
+        ? { "Authorization": `Bearer ${JSON.parse(localStorage.getItem("appData") || "{}").token}` }
+        : {}),
       ...headers,
     };
 
@@ -51,22 +57,31 @@ const createApiCall = (url: string, method: HttpMethod) => {
             : undefined,
       });
 
-      const data = await response.json();
-
+      // NEW LOGIC: Handle 401 based on isAuthEndpoint flag
       if (response.status === 401) {
-        toast.error("Session expired. Please sign in again.");
-        setTimeout(() => {
-          window.location.href = "/session-expired";
-        }, 1500);
-        return Promise.reject(data);
+        if (!isAuthEndpoint) {
+          // This is a 401 on a protected route, so session expired.
+          toast.error("Session expired. Please sign in again.");
+          setTimeout(() => {
+            window.location.href = "/session-expired"; // Or navigate to /auth/login
+          }, 1500);
+        }
+        // If it's an auth endpoint (like /login), we don't redirect on 401.
+        // We let the specific component handle it (e.g., display "Invalid credentials").
+        const errorData = await response.json();
+        return Promise.reject(errorData); // Always reject so component can catch and show specific error
       }
+
+      const data = await response.json(); // Parse JSON for other statuses too
 
       if (!response.ok) {
+        // For other non-OK statuses (e.g., 400, 403, 404, 500), just reject with the error data
         return Promise.reject(data);
       }
 
-      return Promise.resolve(data);
+      return Promise.resolve(data); // Resolve with data on success
     } catch (error) {
+      // This catches network errors (e.g., server unreachable)
       toast.error("Network error, please try again.");
       return Promise.reject(error);
     }
