@@ -1,6 +1,6 @@
 import createApiCall, { GET } from "@/components/api/api";
 import { AuthLayout } from "@/components/auth/AuthLayout";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 // Explicitly import React if not already
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
