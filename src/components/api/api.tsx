@@ -17,7 +17,7 @@ interface ApiCallParams {
 
 const createApiCall = (url: string, method: HttpMethod) => {
   return async (params: ApiCallParams = {}): Promise<any> => {
-    let apiEndpoint = `http://localhost:8000/${url}`;
+    let apiEndpoint = `https://automa-api-669034154292.asia-south1.run.app/${url}`;
     // Destructure isAuthEndpoint from params
     const { body, urlParams, pathVariables, headers = {}, isAuthEndpoint = false } = params; // NEW: Default to false
 
